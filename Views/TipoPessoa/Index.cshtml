@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FiaponSmartCity.Models.TipoPessoa>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Moradores - FIAP Smart City</title>
+</head>
+
+<body>
+    <h1>Moradores da FIAP Smart City</h1>
+    <p>
+        <a asp-controller="TipoPessoa" asp-action="Cadastrar">Novo(a) Morador(a)</a>
+    </p>
+    <table class="table" border="1">
+        <tr>
+            <th>Id</th>
+            <th>Endereço</th>
+            <th></th>
+        </tr>
+        
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <label>@item.IdTipo</label>
+                </td>
+                <td>
+                    <label>@item.Endereco</label>
+                </td>
+                <td>
+                        <a asp-controller="TipoPessoa"
+                            asp-action="Editar"
+                            asp-route-id="@item.IdTipo">Editar
+                        </a>
+                        <a asp-controller="TipoPessoa"
+                            asp-action="Consultar"
+                            asp-route-id="@item.IdTipo">Consultar
+                        </a>
+                        <a asp-controller="TipoPessoa"
+                            asp-action="Excluir"
+                            asp-route-id="@item.IdTipo">Excluir
+                        </a>
+                </td>
+                </tr>
+        }
+    </table> 
+</body>
