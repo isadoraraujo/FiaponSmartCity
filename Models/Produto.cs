@@ -1,6 +1,6 @@
 ﻿using FiaponSmartCity.Models;
 
-namespace FiapSmartCity.Models
+namespace FiaponSmartCity.Models
 {
     public class Produto
     {
