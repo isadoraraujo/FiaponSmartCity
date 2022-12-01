@@ -17,7 +17,7 @@ namespace FiaponSmartCity.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 String query =
-                    "SELECT IDTIPO, ENDERECO, RESIDENTE FROM TIPOPESSOA  ";
+                    "SELECT * FROM TIPOPESSOA  ";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
@@ -27,9 +27,8 @@ namespace FiaponSmartCity.Repository
                 {
                     TipoPessoa tipoPess = new TipoPessoa();
                     tipoPess.IdTipo = Convert.ToInt32(dataReader["IDTIPO"]);
-                    tipoPess.Endereco = dataReader["RESIDENTE"].ToString();
-                    tipoPess.Residente = dataReader["RESIDENTE"].Equals("1");
-
+                    tipoPess.Nome = dataReader["NOME"].ToString();
+                    tipoPess.Endereco = dataReader["ENDERECO"].ToString();
                     lista.Add(tipoPess);
                 }
 
@@ -53,7 +52,7 @@ namespace FiaponSmartCity.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 String query =
-                    "SELECT IDTIPO, ENDERECO, RESIDENTE FROM TIPOPESSOA WHERE IDTIPO = @IDTIPO ";
+                    "SELECT * FROM TIPOPESSOA WHERE IDTIPO = @IDTIPO ";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.Add("@IDTIPO", SqlDbType.Int);
@@ -65,12 +64,11 @@ namespace FiaponSmartCity.Repository
                 while (dataReader.Read())
                 {
                     tipoPess.IdTipo = Convert.ToInt32(dataReader["IDTIPO"]);
+                    tipoPess.Nome = dataReader["NOME"].ToString();
                     tipoPess.Endereco = dataReader["ENDERECO"].ToString();
-                    tipoPess.Residente = dataReader["RESIDENTE"].Equals("1");
                 }
 
                 connection.Close();
-
             } 
 
             return tipoPess;
@@ -86,14 +84,14 @@ namespace FiaponSmartCity.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 String query =
-                    "INSERT INTO TIPOPESSOA ( ENDERECO, RESIDENTE ) VALUES ( @endereco, @resid ) ";
+                    "INSERT INTO TIPOPESSOA (  NOME, ENDERECO ) VALUES ( @nome, @endereco) ";
 
                 SqlCommand command = new SqlCommand(query, connection);
 
+                command.Parameters.Add("@nome", SqlDbType.Text);
+                command.Parameters["@nome"].Value = tipoPessoa.Nome;
                 command.Parameters.Add("@endereco", SqlDbType.Text);
                 command.Parameters["@endereco"].Value = tipoPessoa.Endereco;
-                command.Parameters.Add("@redid", SqlDbType.Text);
-                command.Parameters["@resid"].Value = Convert.ToInt32(tipoPessoa.Residente);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -111,21 +109,20 @@ namespace FiaponSmartCity.Repository
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 String query =
-                    "UPDATE TIPOPESSOA SET ENDERECO = @endereco , RESIDENTE = @resid WHERE IDTIPO = @id  ";
+                    "UPDATE TIPOPESSOA SET NOME = @nome, ENDERECO = @endereco WHERE IDTIPO = @id  ";
 
                 SqlCommand command = new SqlCommand(query, connection);
 
-                command.Parameters.Add("@endereco", SqlDbType.Text);
-                command.Parameters.Add("@resid", SqlDbType.Text);
+                command.Parameters.Add("@nome", SqlDbType.Text);
                 command.Parameters.Add("@id", SqlDbType.Int);
-                command.Parameters["@endereco"].Value = tipoPessoa.Endereco;
-                command.Parameters["@resid"].Value = Convert.ToInt32(tipoPessoa.Residente);
+                command.Parameters.Add("@endereco", SqlDbType.Text);
+                command.Parameters["@nome"].Value = tipoPessoa.Nome;
                 command.Parameters["@id"].Value = tipoPessoa.IdTipo;
+                command.Parameters["@endereco"].Value = tipoPessoa.Endereco;
 
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
-
             }
         }
 
